@@ -72,6 +72,34 @@ class Category:
         return "Other"
 
 
+@dataclass
+class Transaction:
+    date: datetime.date
+    amount: float
+    category: str
+    description: str
+    transaction_type: str
+
+    def to_dict(self):
+        return {
+            "date": self.date.strftime("%Y-%m-%d"),
+            "amount": self.amount,
+            "category": self.category,
+            "description": self.description,
+            "transaction_type": self.transaction_type,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "Transaction":
+        return cls(
+            date=datetime.date.fromisoformat(data["date"]),
+            amount=float(data["amount"]),
+            category=data["category"],
+            description=data["description"],
+            transaction_type=data["transaction_type"],
+        )
+
+
 
 class FinanceTracker:
     def load_transactions(self):
