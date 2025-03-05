@@ -186,3 +186,19 @@ class FinanceTracker:
             print(f"\nInput Error: {e}\n")
         except Exception as e:
             print(f"\nAn error occurred: {e}\n")
+
+
+    def view_transactions(self):
+        all_transactions = self.transactions["income"] + self.transactions["expense"]
+        if not all_transactions:
+            print("\nNo transactions recorded.\n")
+            return
+        print("\nAll Transactions\n")
+        headers = ["Date", "Amount", "Category", "Description", "Type"]
+        rows = [
+            [t.date, t.amount, t.category, t.description, t.transaction_type]
+            for t in all_transactions
+        ]
+        print(tabulate(rows, headers=headers, tablefmt="fancy_grid"))
+        print()
+
