@@ -2,6 +2,7 @@ from finance import FinanceTracker
 from auth import UserAuthentication
 from menu_display_options import Menu
 from cli_argparse import parse_args, handle_args
+import getpass
 
 
 class MainMenu:
@@ -65,7 +66,7 @@ if __name__ == "__main__":
     while True:
         print("\nEnter your credentials to Login.")
         username = input("Enter Username: ")
-        password = input("Enter Password: ")
+        password = getpass.getpass("Enter Password: ")
 
         if auth.verify_login(username, password):
             print("\nLogin successful! Welcome,", username)
