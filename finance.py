@@ -1,3 +1,78 @@
+import datetime
+import json
+from dataclasses import dataclass
+from typing import List, Dict
+from pathlib import Path
+from tabulate import tabulate
+import pandas as pd
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import wordnet
+
+
+
+class Category:
+    CATEGORIES = [
+        "Groceries",
+        "Rent",
+        "Utilities",
+        "Entertainment",
+        "Transportation",
+        "Shopping",
+        "Health",
+        "Other",
+    ]
+
+    @classmethod
+    def list_categories(cls):
+        return cls.CATEGORIES
+
+    @staticmethod
+    def auto_categorize(description: str) -> str:
+        description = description.lower()
+        keywords = {
+            "food": "Groceries",
+            "supermarket": "Groceries",
+            "rent": "Rent",
+            "electricity": "Utilities",
+            "water": "Utilities",
+            "movie": "Entertainment",
+            "cinema": "Entertainment",
+            "bus": "Transportation",
+            "car": "Transportation",
+            "fuel": "Transportation",
+            "uber": "Transportation",
+            "clothes": "Shopping",
+            "shopping": "Shopping",
+            "hospital": "Health",
+            "medication": "Health",
+            "trip": "Entertainment",
+            "shoes": "Shopping",
+            "drugs": "Health",
+        }
+
+        lemmatizer = WordNetLemmatizer()
+        words = word_tokenize(description)
+
+        for word in words:
+            lemma = lemmatizer.lemmatize(word)
+            if lemma in keywords:
+                return keywords[lemma]
+
+        # Try finding a similar word in WordNet
+        for word in words:
+            lemma = lemmatizer.lemmatize(word)
+            synsets = wordnet.synsets(lemma)
+            for synset in synsets:
+                for lemma_name in synset.lemma_names():
+                    if lemma_name in keywords:
+                        return keywords[lemma_name]
+
+        return "Other"
+
+
+
 class FinanceTracker:
     def load_transactions(self):
         if self.transactions_file.exists():
