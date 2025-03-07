@@ -1,3 +1,18 @@
+class Auth_Menu:
+    def auth_menu(self):
+        menu = """
+        Select an option to login to the App
+        ====================
+        
+        1. Register
+        2. Login
+        
+        0. Exit
+        ====================
+        
+        """
+        print(menu)
+        
 class Menu:
     def __init__(self, username:str):
         self.username = username
@@ -14,9 +29,9 @@ class Menu:
         
         1. Manage Transactions
         2. Track Budget
-        3. Data Analysis & Reports
+        3. Financial Analysis & Reports
         
-        0. Exit
+        0. Logout
         ========================
         """
         print(menu)
@@ -30,12 +45,16 @@ class Menu:
         2. Update Transaction
         3. Delete Transaction
         4. View Transactions
-        5. Import Transactions
+        5. Search Transactions
+        6. Import Transactions
         
         0. Back
         ========================
         """
         print(menu)
+        
+    
+    
     
     def budget_menu(self):
         menu = """
@@ -57,8 +76,7 @@ class Menu:
         
         1. View Financial Summary
         2. Export Financial Summary
-        3. Search Transactions
-        4. Spending Reports by Category
+        3. Spending Reports by Category
         
         0. Back
         ========================
