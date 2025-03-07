@@ -137,7 +137,7 @@ finance-tracker/
 │── main.py                    # Main application entry point
 │── auth.py                     # User authentication system
 │── finance.py                   # Core finance tracking functionality
-│── menu_display_options.py       # Menu system for the application
+│── menu_display.py       # Menu system for the application
 │── cli_argparse.py               # Command line interface functionality
 │── transactions/                 # Stores transaction data per user
 │── test_file/                     # Contains test.csv for importing transactions
