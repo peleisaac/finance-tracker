@@ -1,8 +1,7 @@
 from finance import FinanceTracker
-from auth import UserAuthentication
-from menu_display_options import Menu
+from menu_display_options import Auth_Menu, Menu
 from cli_argparse import parse_args, handle_args
-import getpass
+from auth import UserAuthentication
 
 
 class MainMenu:
@@ -27,6 +26,8 @@ class MainMenu:
                 elif sub_choice == "4":
                     self.tracker.view_transactions()
                 elif sub_choice == "5":
+                    self.tracker.search_transactions()
+                elif sub_choice == "6":
                     file_path = input("Enter file path for import: ")
                     self.tracker.import_transactions(file_path)
                 elif sub_choice == "0":
@@ -46,11 +47,8 @@ class MainMenu:
                 if sub_choice == "1":
                     self.tracker.view_financial_summary()
                 elif sub_choice == "2":
-                    file_path = input("Enter file path for export: ")
-                    self.tracker.export_financial_summary(file_path)
+                    self.tracker.export_financial_summary()
                 elif sub_choice == "3":
-                    self.tracker.search_transactions()
-                elif sub_choice == "4":
                     self.tracker.spending_reports_by_category()
                 elif sub_choice == "0":
                     continue
@@ -62,29 +60,27 @@ class MainMenu:
 
 
 if __name__ == "__main__":
+    menu = Auth_Menu()
     auth = UserAuthentication()
+
     while True:
-        print("\nEnter your credentials to Login.")
-        username = input("Enter Username: ")
-        password = getpass.getpass("Enter Password: ")
-
-        if auth.verify_login(username, password):
-            print("\nLogin successful! Welcome,", username)
-            mainmenu = MainMenu(username)
-            args = parse_args()
-            if any(vars(args).values()):
-                handle_args(args, mainmenu.tracker, username)
-            else:
+        menu.auth_menu()
+        choice = input("Enter your choice: ")
+        
+        if choice == "1":  # Register
+            if auth.register():  
+                username = auth.username  
+                mainmenu = MainMenu(username)
                 mainmenu.run()
-            break
-
-        print("\nInvalid credentials.")
-        choice = input("Forgot password? Type 'reset' or 'register' to create an account, or 'exit' to quit: ").strip().lower()
-
-        if choice == "reset":
-            auth.reset_password()  # Call reset password function
-        elif choice == "register":
-            auth.add_credentials()  # Let user register an account
-        elif choice == "exit":
+        
+        elif choice == "2":  # Login
+            if auth.login(): 
+                username = auth.username 
+                mainmenu = MainMenu(username)  
+                mainmenu.run()
+        
+        elif choice == "0":  # Exit
             print("Exiting application.")
             break
+        else:
+            print("Incorrect choice. Please pick a choice from the options in the menu")
