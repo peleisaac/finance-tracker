@@ -1,1 +1,1 @@
-web: ttyd -p 7681 --writable python main.py
+web: ttyd -p $PORT --writable python main.py
