@@ -1,1 +1,1 @@
-worker: python main.py
+web: ttyd -p $PORT python main.py
