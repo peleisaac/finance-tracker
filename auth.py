@@ -1,18 +1,25 @@
-from dataclasses import dataclass
-import bcrypt
+"""
+User authentication module for handling registration, login, and password resets.
+"""
+
 import getpass
 import re
+import json
 from pathlib import Path
 from typing import List, Dict
-import json
+from dataclasses import dataclass
+import bcrypt
 
 
 @dataclass
 class Credentials:
+    """Data structure for storing user credentials."""
+
     username: str
     password: str
 
     def to_dict(self):
+        """Convert credentials to dictionary format."""
         return {
             "username": self.username,
             "password": self.password,
@@ -20,6 +27,7 @@ class Credentials:
 
     @classmethod
     def from_dict(cls, data: dict) -> "Credentials":
+        """Create a Credentials instance from a dictionary."""
         return cls(
             username=data["username"],
             password=data["password"],
@@ -27,14 +35,18 @@ class Credentials:
 
 
 class UserAuthentication:
+    """Handles user registration, login, and credential management."""
+
     def __init__(self):
         self.credentials: Dict[str, List[Credentials]] = {"Auth": []}
         self.credentials_file = Path("credentials.json")
+        self.username = None
         self.load_credentials()
 
     def load_credentials(self):
+        """Load credentials from the JSON file."""
         if self.credentials_file.exists():
-            with open(self.credentials_file, "r") as file:
+            with open(self.credentials_file, "r", encoding="utf-8") as file:
                 logins = json.load(file)
                 login_credentials = logins.get("credentials", {})
 
@@ -50,17 +62,23 @@ class UserAuthentication:
                     print("Warning: Invalid credentials format.")
 
     def save_credentials(self):
+        """Save credentials to the JSON file."""
         data = {
             "credentials": {"Auth": [l.to_dict() for l in self.credentials["Auth"]]}
         }
-        with open(self.credentials_file, "w") as file:
+        with open(self.credentials_file, "w", encoding="utf-8") as file:
             json.dump(data, file, indent=4)
 
     def register(self):
+        """Register a new user."""
         try:
             while True:
-                username = input("Enter Username: ").lower()
-                if any(cred.username == username for cred in self.credentials["Auth"]):
+                username = input("Enter Username: ").lower().strip()
+                if not username:
+                    print("Username cannot be empty. Please enter a valid username.")
+                elif any(
+                    cred.username == username for cred in self.credentials["Auth"]
+                ):
                     print("Username already exists. Please try a different one.")
                 else:
                     break
@@ -89,16 +107,16 @@ class UserAuthentication:
             self.username = username
             return True
 
-        except Exception as e:
+        except (IOError, ValueError) as e:
             print(f"Error adding credentials: {e}")
             return False
 
     def login(self):
+        """Log in a user."""
         while True:
             username = input("Enter Username: ").lower()
             password = getpass.getpass("Enter Password: ")
 
-            # Check if username exists
             user_found = next(
                 (
                     cred
@@ -112,19 +130,17 @@ class UserAuthentication:
                 print("\nNo account found for this username.")
                 choice = input("Would you like to sign up? (y/n): ").strip().lower()
                 if choice == "y":
-                    self.register()  # Call your registration function
-                    return False
+                    self.register()
                 else:
                     print("Returning to the main menu.")
-                    return False  # Exit login process
+                return False
 
-            # Allow up to 3 password attempts
             attempts = 3
             while attempts > 0:
                 if bcrypt.checkpw(password.encode(), user_found.password.encode()):
                     print("Login Successful!")
                     self.username = username
-                    return True  # Successful login
+                    return True
 
                 attempts -= 1
                 print(
@@ -133,7 +149,6 @@ class UserAuthentication:
                 if attempts > 0:
                     password = getpass.getpass("Enter Password: ")
 
-            # If all attempts are exhausted, offer password reset
             print("\nYou have exhausted all login attempts.")
             while True:
                 choice = (
@@ -144,35 +159,31 @@ class UserAuthentication:
                 if choice == "y":
                     self.reset_password()
                     return False
-                elif choice == "n":
+                if choice == "n":
                     print("Exiting login process.")
                     return False
-                else:
-                    print("Invalid choice. Please enter 'y' or 'n'.")
+                print("Invalid choice. Please enter 'y' or 'n'.")
 
     def verify_login(self, username, password):
+        """Verify if the login credentials are correct."""
         attempts = 3
         while attempts > 0:
             for cred in self.credentials["Auth"]:
-                if cred.username == username:  # Ensure dictionary access
+                if cred.username == username:
                     if bcrypt.checkpw(password.encode(), cred.password.encode()):
                         return True
             attempts -= 1
             if attempts > 0:
                 print(f"Incorrect password. You have {attempts} attempts remaining.")
-                password = getpass.getpass(
-                    "Re-enter Password: "
-                )  # Use getpass for security
+                password = getpass.getpass("Re-enter Password: ")
         return False
 
     def check_user_exists(self, username):
-        """Check if a username exists in the system"""
-        for cred in self.credentials["Auth"]:
-            if cred.username == username:
-                return True
-        return False
+        """Check if a username exists in the system."""
+        return any(cred.username == username for cred in self.credentials["Auth"])
 
     def reset_password(self):
+        """Reset a user's password."""
         username = input("Enter your username: ").lower()
 
         if not self.check_user_exists(username):
@@ -195,19 +206,15 @@ class UserAuthentication:
             if new_password != confirm_password:
                 print("Passwords do not match. Try again.")
                 continue
-
             if len(new_password) < 8:
                 print("Your password must be at least 8 characters long.")
                 continue
-
             if not re.search(r"\d", new_password):
                 print("Password must contain at least one number.")
                 continue
-
             if not re.search(r"[A-Z]", new_password):
                 print("Password must contain at least one uppercase letter.")
                 continue
-
             if not re.search(r"[a-z]", new_password):
                 print("Password must contain at least one lowercase letter.")
                 continue
