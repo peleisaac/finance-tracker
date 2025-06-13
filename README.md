@@ -541,6 +541,8 @@ For support and questions:
  
 ---
  
-**Version:** 1.0.0  
+**Version:** 1.0.0
+
 **Last Updated:** 12th June 2025 
+
 **Tested On:** Python 3.13.3, macOS Sonoma 14.6.1
