@@ -193,6 +193,7 @@ python cli_argparse.py --username Isaac --inport transactions.json
 4. Enter password: "TestPass123"
 
 **Expected Result:** User registered successfully
+
 **Actual Result:** ✅ Pass - User registered successfully
  
 ![Test Case One](screenshots/test_case_one.png)
@@ -231,6 +232,7 @@ python cli_argparse.py --username Isaac --inport transactions.json
 11. Select View transactions
  
 **Expected Result:** Both transactions (Income and Expense) visible in list
+
 **Actual Result:** ✅ Pass - Transactions displayed correctly
  
 ![Test Case Three - 1](screenshots/test_case_three.png)
@@ -249,6 +251,7 @@ python cli_argparse.py --username Isaac --inport transactions.json
 5. Enter amount: 1000 and description: "Salary"
 
 **Expected Result:** System should reject duplicate by displaying "Transaction already exists"
+
 **Actual Result:** ✅ Pass - Duplicate rejected with message "Transaction already exists"
  
 ![Test Case Four](screenshots/test_case_four.png)
@@ -262,6 +265,7 @@ python cli_argparse.py --username Isaac --inport transactions.json
 2. Enter Password of user (testuser)
 
 **Expected Result:** See a display of "Income of 500.0 added successfully!"
+
 **Actual Result:** ✅ Pass - CLI operation successful with a message of "Income of 500.0 added successfully!"
  
 ![Test Case Five](screenshots/test_case_five.png)
