@@ -1,7 +1,19 @@
-class Auth_Menu:
+"""
+Menu display module for Finance Tracker Application.
+
+This module contains classes for displaying various menus in the finance tracker app,
+including authentication menus and main application menus.
+"""
+
+
+class AuthMenu:
+    """Handles authentication-related menu display."""
+
     def auth_menu(self):
+        """Display the authentication menu with login options."""
         menu = """
         Select an option to login to the App
+        
         ====================
         
         1. Register
@@ -12,17 +24,40 @@ class Auth_Menu:
         
         """
         print(menu)
-        
-class Menu:
-    def __init__(self, username:str):
-        self.username = username
-        
-    def display_menu(self):
-        
-        print(f"Finance Tracker - User: {self.username}")
-            
+
+    def display_welcome_message(self):
+        """Display a welcome message for new users."""
+
         menu = """
+        ==========================================
+        Finance Tracker Application
+        ==========================================
+        This application helps you track 
+        your finances effectively.
         
+        It allows you to manage transactions, 
+        track budgets, and analyze financial data.
+        ==========================================
+        """
+        print(menu)
+
+
+class Menu:
+    """Handles main application menu display for logged-in users."""
+
+    def __init__(self, username: str):
+        """
+        Initialize the Menu with a username.
+
+        Args:
+            username (str): The username of the logged-in user
+        """
+        self.username = username
+
+    def display_menu(self):
+        """Display the main application menu."""
+        print(f"Finance Tracker - User: {self.username}")
+        menu = """
         Welcome to your Finance Tracker Application.
         Please select an option below:
         ========================
@@ -35,8 +70,9 @@ class Menu:
         ========================
         """
         print(menu)
-    
+
     def transactions_menu(self):
+        """Display the transactions management menu."""
         menu = """
         Manage Transactions
         ========================
@@ -52,11 +88,9 @@ class Menu:
         ========================
         """
         print(menu)
-        
-    
-    
-    
+
     def budget_menu(self):
+        """Display the budget tracking menu."""
         menu = """
         Track Budget
         ========================
@@ -70,6 +104,7 @@ class Menu:
         print(menu)
 
     def data_analysis_menu(self):
+        """Display the data analysis and reports menu."""
         menu = """
         Data Analysis & Reports
         ========================
