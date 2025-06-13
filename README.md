@@ -334,7 +334,7 @@ This project was deployed to **Heroku** and accessed via a browser-based termina
  
 ---
  
-## Running the application Locally with ttyd (for Testing)
+## Running the application Locally with ttyd
  
 You can also use ttyd locally to test the CLI experience in a browser:
 ### Clone the repository
@@ -423,6 +423,7 @@ Then visit [http://localhost:7681](http://localhost:7681) in your browser to int
 - **Purpose:** Cross-platform colored terminal output
 - **Rationale:** Enhances user experience with colored success/error messages. Works consistently across Windows, macOS, and Linux.
 - **Alternative Considered:** ANSI codes - Rejected due to Windows compatibility issues
+- **Note:** This library is currently not existent in project. However, it will be of essence in the future if you want to beautify your console for richer user experience.
  
 ### Supporting Libraries
  
