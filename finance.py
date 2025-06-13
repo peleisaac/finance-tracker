@@ -1,3 +1,11 @@
+"""
+finance.py
+
+A financial tracking module that supports categorizing expenses, analyzing transactions,
+and summarizing financial data using NLP techniques.
+"""
+
+import os
 import datetime
 import json
 from dataclasses import dataclass
@@ -5,15 +13,14 @@ from typing import List, Dict
 from pathlib import Path
 from tabulate import tabulate
 import pandas as pd
-import os
-import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet
 
 
-
 class Category:
+    """Handles expense categorization, including auto-categorization using keywords."""
+
     CATEGORIES = [
         "Groceries",
         "Rent",
@@ -27,10 +34,13 @@ class Category:
 
     @classmethod
     def list_categories(cls):
+        """Return list of available expense categories."""
         return cls.CATEGORIES
 
     @staticmethod
     def auto_categorize(description: str) -> str:
+        """Automatically categorize expense based on description keywords."""
+
         description = description.lower()
         keywords = {
             "food": "Groceries",
@@ -75,6 +85,8 @@ class Category:
 
 @dataclass
 class Transaction:
+    """Represents a financial transaction with date, amount, category, and description."""
+
     date: datetime.date
     amount: float
     category: str
@@ -82,6 +94,8 @@ class Transaction:
     transaction_type: str
 
     def to_dict(self):
+        """Convert transaction to dictionary format."""
+
         return {
             "date": self.date.strftime("%Y-%m-%d"),
             "amount": self.amount,
@@ -92,6 +106,8 @@ class Transaction:
 
     @classmethod
     def from_dict(cls, data: dict) -> "Transaction":
+        """Create transaction from dictionary data."""
+
         return cls(
             date=datetime.date.fromisoformat(data["date"]),
             amount=float(data["amount"]),
@@ -102,6 +118,8 @@ class Transaction:
 
 
 class FinanceTracker:
+    """Main class for tracking financial transactions, budgets, and generating reports."""
+
     def __init__(self, username: str):
         self.username = username
         self.transactions: Dict[str, List[Transaction]] = {"income": [], "expense": []}
@@ -116,13 +134,15 @@ class FinanceTracker:
         self.load_transactions()
 
     def get_balance(self):
+        """Calculate current balance (total income - total expenses)."""
         total_income = sum(t.amount for t in self.transactions["income"])
         total_expense = sum(t.amount for t in self.transactions["expense"])
         return total_income - total_expense
 
     def load_transactions(self):
+        """Load transactions and budgets from JSON file."""
         if self.transactions_file.exists():
-            with open(self.transactions_file, "r") as file:
+            with open(self.transactions_file, "r", encoding="utf-8") as file:
                 data = json.load(file)
                 transactions_data = data.get("transactions", {})
 
@@ -150,6 +170,7 @@ class FinanceTracker:
             self.save_transactions()
 
     def save_transactions(self):
+        """Save transactions and budgets to JSON file."""
         data = {
             "transactions": {
                 "income": [t.to_dict() for t in self.transactions["income"]],
@@ -157,10 +178,12 @@ class FinanceTracker:
             },
             "budgets": self.budgets,
         }
-        with open(self.transactions_file, "w") as file:
+        with open(self.transactions_file, "w", encoding="utf-8") as file:
             json.dump(data, file, indent=4)
 
     def add_transaction(self):
+        """Add a new income or expense transaction."""
+
         try:
             print(f"\nAdding a new transaction for {self.username}...")
             transaction_type = input("Enter type (income/expense): ").lower()
@@ -228,12 +251,12 @@ class FinanceTracker:
             if balance < 100:
                 print(f"⚠️ Warning: Your balance is low! Remaining: ${balance}")
 
-        except ValueError as e:
-            print(f"\nInput Error: {e}\n")
-        except Exception as e:
+        except (ValueError, KeyError, FileNotFoundError) as e:
             print(f"\nAn error occurred: {e}\n")
 
     def delete_transaction(self):
+        """Delete selected transactions by index."""
+
         print("\nDelete Transactions\n")
         all_transactions = self.transactions["income"] + self.transactions["expense"]
 
@@ -266,6 +289,7 @@ class FinanceTracker:
             print("Invalid input. Please enter numbers separated by commas.\n")
 
     def update_transaction(self):
+        """Update an existing transaction."""
         print("\nUpdate a Transaction\n")
         all_transactions = self.transactions["income"] + self.transactions["expense"]
         if not all_transactions:
@@ -325,6 +349,8 @@ class FinanceTracker:
             print("Invalid input. Please enter the correct values.\n")
 
     def view_transactions(self):
+        """Display all transactions in a table format."""
+
         all_transactions = self.transactions["income"] + self.transactions["expense"]
         if not all_transactions:
             print("\nNo transactions recorded.\n")
@@ -339,6 +365,8 @@ class FinanceTracker:
         print()
 
     def import_transactions(self, file_path):
+        """Import transactions from CSV or JSON file."""
+
         try:
             if file_path.endswith(".csv"):
                 df = pd.read_csv(file_path)
@@ -375,10 +403,12 @@ class FinanceTracker:
             print(f"\n {added_count} new transactions imported successfully!")
             print(f"{duplicate_count} duplicate transactions skipped. \n")
 
-        except Exception as e:
+        except (ValueError, KeyError, FileNotFoundError) as e:
             print(f"\nError importing transactions: {e}\n")
 
     def view_financial_summary(self):
+        """Display comprehensive financial summary with income, expenses, and budgets."""
+
         print("\nFinancial Summary\n")
 
         # Display all income transactions
@@ -423,7 +453,10 @@ class FinanceTracker:
         print(f"Total Budget Allocation: {total_budget}")
         print(f"Planned Savings (after budgeting): {planned_savings}\n")
 
+
     def search_transactions(self):
+        """Search transactions by keyword in date, category, or description."""
+
         print("\nSearch Transactions\n")
         keyword = input("Enter keyword (date, category, or description): ").lower()
         filtered = [
@@ -445,7 +478,8 @@ class FinanceTracker:
         print()
 
     def export_financial_summary(self):
-        # Create the financial summary folder if it doesn't exist
+        """Export financial summary to CSV or JSON format."""
+
         folder_name = "financial_summary"
         os.makedirs(folder_name, exist_ok=True)
 
@@ -459,11 +493,10 @@ class FinanceTracker:
             if choice == "1":
                 file_format = "csv"
                 break
-            elif choice == "2":
+            if choice == "2":
                 file_format = "json"
                 break
-            else:
-                print("Invalid choice. Please enter 1 or 2.")
+            print("Invalid choice. Please enter 1 or 2.")
 
         # Define file path
         file_name = f"financial_report.{file_format}"
@@ -501,7 +534,7 @@ class FinanceTracker:
 
             # Export as CSV
             if file_format == "csv":
-                with open(file_path, "w", newline="") as file:
+                with open(file_path, "w", newline="", encoding="utf-8") as file:
                     file.write("Income Breakdown\n")
                     df_income = pd.DataFrame(
                         income_data, columns=["Date", "Amount", "Description"]
@@ -548,17 +581,17 @@ class FinanceTracker:
                         "planned_savings": planned_savings,
                     },
                 }
-                with open(file_path, "w") as file:
+                with open(file_path, "w", encoding="utf-8") as file:
                     json.dump(data, file, indent=4)
 
             print(f"\nFinancial summary successfully exported to {file_path}\n")
 
-        except Exception as e:
-            print(f"\nError exporting data: {e}\n")
-        except Exception as e:
-            print(f"\nError exporting data: {e}\n")
+        except (ValueError, KeyError, FileNotFoundError) as e:
+            print(f"\nAn error occurred: {e}\n")
 
     def set_budget(self):
+        """Set budget amount for a specific category."""
+
         print("\nSet Budget for a Category\n")
         print("Available Categories:")
         for i, cat in enumerate(Category.list_categories(), 1):
@@ -575,19 +608,20 @@ class FinanceTracker:
 
             if total_budget > total_income:
                 print(
-                    f"\nError: Total budget allocation ({total_budget}) exceeds total income ({total_income}). Please adjust the budget.\n"
+                    f"\nError: Total budget allocation ({total_budget}) "
+                    f"exceeds total income ({total_income}). Please adjust the budget.\n"
                 )
                 return
 
             self.budgets[category] = amount
             self.save_transactions()
             print(f"\nBudget set for {category}: {amount}\n")
-        except ValueError as e:
-            print(f"\nInput Error: {e}\n")
-        except Exception as e:
+        except (ValueError, KeyError, FileNotFoundError) as e:
             print(f"\nAn error occurred: {e}\n")
 
     def view_budget(self):
+        """Display budget overview with spent amounts and remaining balances."""
+
         print("\nBudget Overview\n")
         if not self.budgets:
             print("No budgets set.\n")
@@ -604,6 +638,8 @@ class FinanceTracker:
         print()
 
     def spending_reports_by_category(self):
+        """Generate spending reports grouped by category."""
+
         print("\nSpending Reports by Category\n")
         if not self.transactions["expense"]:
             print("No expense transactions recorded.\n")
@@ -634,6 +670,7 @@ class FinanceTracker:
         if biggest_expense:
             print("\nBiggest Expense:")
             print(
-                f"{biggest_expense.category} - {biggest_expense.amount} on {biggest_expense.date} ({biggest_expense.description})"
+                f"{biggest_expense.category} - {biggest_expense.amount}"
+                f"on {biggest_expense.date} ({biggest_expense.description})"
             )
         print()
