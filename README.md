@@ -10,7 +10,7 @@ A comprehensive personal finance management tool built in Python that helps user
 - [Usage](#usage)
 - [Testing](#testing)
 - [Deployment](#deployment)
-- [Running the application Locally with ttyd (for Testing)](#locally-running-the-application-using-ttyd)
+- [Running the application Locally with ttyd](#running-the-application-locally-with-ttyd)
 - [Library Rationale](#library-rationale)
 - [File Structure](#file-structure)
 - [Security Features](#security-features)
