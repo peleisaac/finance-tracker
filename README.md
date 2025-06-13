@@ -476,10 +476,6 @@ finance-tracker/
  
 ## Screenshots
  
-### Main Menu Interface
- 
-_The main application menu showing all available options_
- 
 ### Transaction Management
  
 ![Transaction View](screenshots/transaction_view.png)
@@ -507,7 +503,7 @@ _Sample financial summary report with category breakdown_
  
 ## Credits
  
-**Developer:**Isaac Aboagye
+**Developer:** Isaac Aboagye
 **Course:** Portfolio project 3
 **Institution:** Code Institute
 **Year:** 2024
@@ -537,4 +533,4 @@ For support and questions:
  
 **Version:** 1.0.0  
 **Last Updated:** December 2024  
-**Tested On:** Python 3.9, Windows 11, Ubuntu 20.04, macOS 12
+**Tested On:** Python 3.13.3, macOS Sonoma 14.6.1
