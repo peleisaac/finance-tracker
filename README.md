@@ -200,12 +200,10 @@ python cli_argparse.py --username Isaac --inport transactions.json
  
 **Objective:** Verify password strength requirements - This test case verifies the strength of the password in the registration process.
 **Test Data:**
-| Test Case || Password | Expected | Actual | Status |
-|-----------||----------|----------|--------|--------|
-| TC002a    || weak     | ❌ Reject | ❌ Reject | ✅ Pass |
-| TC002b    || password123 | ❌ Reject | ❌ Reject | ✅ Pass |
-| TC002c    || Password123 | ✅ Accept | ✅ Accept | ✅ Pass |
- 
+1. Password Validation Test Case One - TC002a - weak - Expected (❌ Reject) - Actual (❌ Reject) - Status (✅ Pass)
+2. Password Validation Test Case Two - TC002b - password123 - Expected (❌ Reject) - Actual (❌ Reject) - Status (✅ Pass)
+3. Password Validation Test Case Three - TC002c - weak - Expected (✅ Accept) - Actual (✅ Accept) - Status (✅ Pass)
+
 **Expected Results:**
 - **TC002a:** Error message: "Your password must be at least 8 characters long."
 - **TC002b:** Error message: "Password must contain at least one uppercase letter"
