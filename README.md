@@ -191,8 +191,9 @@ python cli_argparse.py --username Isaac --inport transactions.json
 2. Select option "1" (Register)
 3. Enter username: "testuser"
 4. Enter password: "TestPass123"
-   **Expected Result:** User registered successfully
-   **Actual Result:** ✅ Pass - User registered successfully
+
+**Expected Result:** User registered successfully
+**Actual Result:** ✅ Pass - User registered successfully
  
 ![Test Case One](screenshots/test_case_one.png)
  
@@ -228,8 +229,9 @@ python cli_argparse.py --username Isaac --inport transactions.json
 9. Enter amount: 500 and description: "Food"
 10. Select "Manage Transactions"
 11. Select View transactions
-   **Expected Result:** Both transactions (Income and Expense) visible in list
-   **Actual Result:** ✅ Pass - Transactions displayed correctly
+ 
+**Expected Result:** Both transactions (Income and Expense) visible in list
+**Actual Result:** ✅ Pass - Transactions displayed correctly
  
 ![Test Case Three - 1](screenshots/test_case_three.png)
 ![Test Case Three - 2](screenshots/test_case_three_2.png)
@@ -245,8 +247,9 @@ python cli_argparse.py --username Isaac --inport transactions.json
 3. Click on "Add Transaction"
 4. Enter "income" and enter date (2025-03-12) for transaction
 5. Enter amount: 1000 and description: "Salary"
-   **Expected Result:** System should reject duplicate by displaying "Transaction already exists"
-   **Actual Result:** ✅ Pass - Duplicate rejected with message "Transaction already exists"
+
+**Expected Result:** System should reject duplicate by displaying "Transaction already exists"
+**Actual Result:** ✅ Pass - Duplicate rejected with message "Transaction already exists"
  
 ![Test Case Four](screenshots/test_case_four.png)
  
@@ -257,6 +260,7 @@ python cli_argparse.py --username Isaac --inport transactions.json
 1. Run command `python cli_argparse.py --username testuser --add-income 500`
 ![Run CLI argparse command](screenshots/test_case_five_run_command.png)
 2. Enter Password of user (testuser)
+
 **Expected Result:** See a display of "Income of 500.0 added successfully!"
 **Actual Result:** ✅ Pass - CLI operation successful with a message of "Income of 500.0 added successfully!"
  
