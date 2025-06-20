@@ -275,25 +275,37 @@ python cli_argparse.py --username Isaac --inport transactions.json
 #### Bug #1: Import Function Error
  
 **Issue:** `--import` argument caused syntax error
+
 **Root Cause:** `import` is a Python reserved keyword
+
 **Solution:** Changed argument to `--inport` in cli_argparse.py
+
 **Testing:** Verified import functionality works with new argument
+
 **Status:** ✅ Fixed
  
 #### Bug #2: Duplicate Transactions
  
 **Issue:** System allowed identical transactions
+
 **Root Cause:** No duplicate checking mechanism
+
 **Solution:** Implemented transaction comparison in finance.py
+
 **Testing:** Attempted to add duplicate - system correctly rejected
+
 **Status:** ✅ Fixed
  
 #### Bug #3: Password Validation Bypass
  
 **Issue:** Weak passwords were accepted
+
 **Root Cause:** Incomplete validation regex
+
 **Solution:** Enhanced password validation in auth.py
+
 **Testing:** Tested various password combinations
+
 **Status:** ✅ Fixed
  
 ## Deployment
